@@ -25,36 +25,37 @@ c = connection.cursor()
 @app.route('/info')
 @app.route('/help')
 def home():
-    '''Return service, pricing and endpoint information'''
-    home_obj = [{"name": "up/1",            # service name/version
-                 "pricing-type": "per-req",
-                 "pricing" : [{"rpc": "up",
-                               "per-req": PRICE,
-                               "description": "Lists available services at time of last crawl."
-                              },
-                              {"rpc": "put",        # True indicates default
-                               "per-req": PRICE,
-                               "per-mb": 0,
-                               "description": "List your own endpoint here. From your 21BC, the "\
+    '''Document the API so that other services could consume automatically.'''
+    home_obj = [{"name": "up",
+                 "service_version": "1",
+                 "api_version": "1",
+                 "description": "Provides directory services backed by a crawler. "\
+                      "Download the server and crawler at https://github.com/weex/up",
+                 "endpoints" : [{"route": "/up",
+                                 "args": None,
+                                 "per-req": PRICE,
+                                 "description": "Lists available services at time of last crawl."
+                                },
+                                {"route": "/put",
+                                 "args": [{"name": "url",
+                                           "description": "URL of endpoint providing JSON-encoded data "\
+                                             "about your service."}],  
+                                 "per-req": PRICE,
+                                 "description": "List your own endpoint here. From your 21BC, the "\
                                        "command is: 21 buy --maxprice "+ str(PRICE) +" url "\
-                                       "http://10.244.34.100/put?url={your_endpoint_url}. If you "\
-                                       "a url that we already have, you'll get a note that it's "\
-                                       "already registered."
-                              },
-                              {"rpc": "info",        # True indicates default
-                               "per-req": 0,
-                               "per-mb": 0,
-                               "description": "This listing of endpoints provided by this server. "\
+                                       "http://10.244.34.100/put?url={your_endpoint_url}",
+                                 "returns": [{"name": "result",
+                                              "description": "Success or failure."},
+                                             {"name": "message",
+                                              "description": "(optional) Additional info."}
+                                            ],
+                                },
+                                {"route": "/info",
+                                 "args": None,
+                                 "per-req": 0,
+                                 "description": "This listing of endpoints provided by this server. "\
                                     "Available at / and /info."
-                              },
-
-                              # default
-                              {"rpc": True,        # True indicates default
-                               "per-req": 0,
-                               "per-mb": 0
-                              }],
-                  "description": "This Up server provides directory services backed by a crawler. "\
-                      "Download the client and server at https://github.com/weex/up"
+                                }],
                 }
                ]
 
