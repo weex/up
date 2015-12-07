@@ -32,6 +32,12 @@ def home():
                                "per-req": PRICE,
                                "description": "Lists available services at time of last crawl."
                               },
+                              {"rpc": "info",        # True indicates default
+                               "per-req": 0,
+                               "per-mb": 0,
+                               "description": "This listing of endpoints provided by this server. "\
+                                    "Available at / and /info."
+                              },
 
                               # default
                               {"rpc": True,        # True indicates default
@@ -39,7 +45,7 @@ def home():
                                "per-mb": 0
                               }],
                   "description": "This Up server provides directory services backed by a crawler. "\
-                  "Download the client and server at https://github.com/weex/up"
+                      "Download the client and server at https://github.com/weex/up"
                 }
                ]
 
