@@ -32,6 +32,15 @@ def home():
                                "per-req": PRICE,
                                "description": "Lists available services at time of last crawl."
                               },
+                              {"rpc": "put",        # True indicates default
+                               "per-req": PRICE,
+                               "per-mb": 0,
+                               "description": "List your own endpoint here. From your 21BC, the "\
+                                       "command is: 21 buy --maxprice "+ str(PRICE) +" url "\
+                                       "http://10.244.34.100/put?url={your_endpoint_url}. If you "\
+                                       "a url that we already have, you'll get a note that it's "\
+                                       "already registered."
+                              },
                               {"rpc": "info",        # True indicates default
                                "per-req": 0,
                                "per-mb": 0,
@@ -56,6 +65,31 @@ def home():
                        }
            )
 
+
+@app.route('/put')
+@payment.required(PRICE)
+def add_listing():
+    url = request.args.get('url')
+
+    res = c.execute("SELECT url from service where url = ?", (url,))
+    count = 0
+    for row in res:
+        count = count + 1
+
+    if count == 0:
+        c.execute("INSERT INTO service (url) VALUES (?)", (url,))
+        body = json.dumps({'result': 'success'}, 
+                          indent=2)
+    else:
+        body = json.dumps({'result': 'success',
+                           'note': 'Endpoint already registered.'},
+                          indent=2)
+
+    return (body, 200, {'Content-length': len(body),
+                        'Content-type': 'application/json',
+                       }
+           )
+    
 @app.route('/up')
 @payment.required(PRICE)
 def listing():
