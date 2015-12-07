@@ -1,0 +1,3 @@
+INSERT INTO "service" VALUES(1,'http://localhost:21411/','yourself',NULL,'',NULL,NULL,NULL);
+INSERT INTO "service" VALUES(2,'http://localhost:5000/','',NULL,'',NULL,NULL,NULL);
+INSERT INTO "service" VALUES(3,'http://localhost:5001/',NULL,NULL,'',NULL,NULL,NULL);

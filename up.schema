@@ -1,0 +1,10 @@
+CREATE TABLE service (
+    id          INTEGER PRIMARY KEY,
+    url         TEXT NOT NULL,
+    owner       TEXT,
+    response    TEXT,
+    name        TEXT,
+    description TEXT,
+    endpoint_pricing TEXT,
+    updated     DATETIME
+);
