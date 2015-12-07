@@ -29,8 +29,7 @@ def home():
     home_obj = [{"name": "up/1",            # service name/version
                  "pricing-type": "per-req",
                  "pricing" : [{"rpc": "up",
-                               "per-req": 0,
-                               "per-unit": PRICE,
+                               "per-req": PRICE,
                                "description": "Lists available services at time of last crawl."
                               },
 
@@ -39,8 +38,8 @@ def home():
                                "per-req": 0,
                                "per-mb": 0
                               }],
-                  "description": "This Up server provides search services. Download the "\
-                  "client and server at https://github.com/jgarzik/playground21/archive/master.zip"
+                  "description": "This Up server provides directory services backed by a crawler. "\
+                  "Download the client and server at https://github.com/weex/up"
                 }
                ]
 
