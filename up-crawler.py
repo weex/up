@@ -54,11 +54,6 @@ def update_service(url):
             ur = connection.cursor()
             ur.execute("UPDATE service SET response=?, updated=datetime('now') where url=?", (answer.text, url))
 
-        # we should save this data somewhere
-        # there are some different options as far as that goes. causeway sure. apibb maybe. hashfs
-        # lets focus on the data gathering for now. what can we get from a good api info endpoint?
-        # name, website, description, # of endpoints, min price, max price, put these into an 
-        # sqlite db, np...i want to play with apsw.
     print('%s - %s' % (name, url))
     print("\nResponse:\n" + answer.text)
     
