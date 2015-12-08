@@ -65,7 +65,7 @@ while again:
     url = choices[choice-1]  
     #print("You chose %d. Going to visit %s" % (choice, url)
 
-    print(check_output(["curl", url], universal_newlines=True))
+    print(check_output(["curl", '-s', url], universal_newlines=True))
 
     again = yes_or_no("Would you like to visit another?")
 
