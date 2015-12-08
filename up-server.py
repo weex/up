@@ -31,10 +31,29 @@ def home():
                  "api_version": "1",
                  "description": "Provides directory services backed by a crawler. "\
                       "Download the server and crawler at https://github.com/weex/up",
-                 "endpoints" : [{"route": "/up",
+                 "endpoints" : [
+                                {"route": "/up",
                                  "args": None,
                                  "per-req": PRICE,
-                                 "description": "Lists available services at time of last crawl."
+                                 "description": "Get services that have been up in the last 24 hours.",
+                                 "returns": [{"name": "name",
+                                              "description": "name of service"},
+                                             {"name": "url",
+                                              "description": "URL of crawled endpoint."}]
+                                },
+                                {"route": "/up-premium",
+                                 "args": None,
+                                 "per-req": PRICE*4,
+                                 "description": "Get extended info on services that have been up "\
+                                         "in the last week including time of last update.",
+                                 "returns": [{"name": "name",
+                                              "description": "name of service"},
+                                             {"name": "url",
+                                              "description": "URL of crawled endpoint."},
+                                             {"name": "description",
+                                              "description": "Text explaining the crawled service,"},
+                                             {"name": "updated",
+                                              "description": "UTC time of last successful update."}]
                                 },
                                 {"route": "/put",
                                  "args": [{"name": "url",
@@ -97,6 +116,20 @@ def listing():
     services = []
     for url, owner, name in c.execute("SELECT url, owner, name from service where updated > datetime('now','-1 day')"):
         services.append({'name': name, 'url': url})
+
+    body = json.dumps(services, indent=2) 
+    code = 201
+    return (body, code, {'Content-length': len(body),
+                        'Content-type': 'application/json',
+                        }
+            )
+
+@app.route('/up-premium')
+@payment.required(PRICE*4)
+def listing_premium():
+    services = []
+    for url, owner, name, description, updated in c.execute("SELECT url, owner, name, description, updated from service where updated > datetime('now','-7 day')"):
+        services.append({'name': name, 'url': url, 'owner': owner, 'description': description, 'updated': updated})
 
     body = json.dumps(services, indent=2) 
     code = 201
