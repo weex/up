@@ -18,7 +18,7 @@ To get the raw results that this is using, you can open the file that was just c
 
 To add your own service, provide your url (with port number) in the following command:
 
-    21 buy --maxprice 250 url http://10.244.34.100:21411/put?url={your_endpoint_url}
+    21 buy --maxprice 250 url http://10.244.34.100:21411/put?url=your_endpoint_url
 
 Your endpoint will be crawled on the next run, currently set to every 8 hours. Each run updates the 
 name, owner and description from the json provided at the endpoint. For that reason, I recommend 
