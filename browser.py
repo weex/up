@@ -28,8 +28,8 @@ else:
     ask_to_query = True
 
 if ask_to_query:
-    if yes_or_no("Cost: 250 sat. Would you like to query Up for available endpoints?"):
-        o = check_output(["21", "buy", "--maxprice", "250", "url", "http://10.244.34.100:21411/up"], universal_newlines=True)
+    if yes_or_no("Would you like to query Up for available endpoints?"):
+        o = check_output(["curl", "http://10.244.34.100:21411/up"], universal_newlines=True)
         f = open(cache_filename, 'w')
         f.write(o)
     else:
@@ -65,7 +65,43 @@ while again:
     url = choices[choice-1]  
     #print("You chose %d. Going to visit %s" % (choice, url)
 
-    print(check_output(["curl", '-s', url], universal_newlines=True))
+    output = check_output(["curl", '-s', url], universal_newlines=True)
+    parsable = True
+    e_data = ''
+    try:
+        e_data = json.loads(output)
+    except Exception:
+        parsable = False
+
+    if isinstance(e_data, list):
+        endpoints = e_data
+    elif isinstance(e_data, dict) and 'endpoints' in e_data:
+        endpoints = e_data['endpoints']
+    else:
+        parsable = False
+
+    if parsable:
+        attributes = ['route','description', 'args', 'returns', 'per-req', 'per-unit', 'per-mb']
+        obj = lambda: None # because functions can have arbitrary attributes added
+        for e in endpoints:
+            for a in attributes:
+                nodashes = a.replace('-','')
+                if a in e:
+                    setattr(obj, nodashes, e[a])
+                else:
+                    setattr(obj, nodashes, "N/A")
+    
+            text = """Endpoint: %s
+Description: %s
+Args: %s
+Returns: %s
+Pricing (sat): %s per request, %s per unit, %s per MB
+""" % (obj.route, obj.description, obj.args, obj.returns, obj.perreq, obj.perunit, obj.permb)
+            print(text)
+    else:
+        print("Endpoint templates not available.")
+        print(output)
+
 
     again = yes_or_no("Would you like to visit another?")
 
