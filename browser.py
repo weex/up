@@ -28,8 +28,8 @@ else:
     ask_to_query = True
 
 if ask_to_query:
-    if yes_or_no("Cost: 250 sat. Would you like to query Up for available endpoints?"):
-        o = check_output(["21", "buy", "--maxprice", "250", "url", "http://10.244.34.100:21411/up"], universal_newlines=True)
+    if yes_or_no("Would you like to get the available endpoints?"):
+        o = check_output(["curl", "http://10.244.34.100:21411/up"], universal_newlines=True)
         f = open(cache_filename, 'w')
         f.write(o)
     else:
